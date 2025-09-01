@@ -1,0 +1,11 @@
+id = "mojo"
+name = "Mojo"
+version = "0.0.1"
+schema_version = 1
+authors = ["Eduardo Ginez <eginez@gmail.com>"]
+description = "Mojo language support for Zed."
+repository = "https://github.com/eginez/mojo-zed-extension"
+
+[grammars.mojo]
+repository = "https://github.com/lsh/tree-sitter-mojo"
+rev = "564d5a8"

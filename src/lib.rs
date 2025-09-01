@@ -1,14 +1,9 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
+zed_extension_api::register_extension!(MojoExtension);
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+struct MojoExtension;
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+impl zed_extension_api::Extension for MojoExtension {
+    fn new() -> Self {
+        Self
     }
 }
