@@ -1,0 +1,3 @@
+[submodule "grammars/mojo"]
+	path = grammars/mojo
+	url = https://github.com/lsh/tree-sitter-mojo

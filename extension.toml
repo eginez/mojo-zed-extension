@@ -8,4 +8,8 @@ repository = "https://github.com/eginez/mojo-zed-extension"
 
 [grammars.mojo]
 repository = "https://github.com/lsh/tree-sitter-mojo"
-rev = "564d5a8"
+rev = "564d5a8489e20e5f723020ae40308888699055c0"
+
+[language_servers.mojo-lsp-server]
+name = "Mojo Language Server"
+language = "Mojo"

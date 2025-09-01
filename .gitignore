@@ -13,3 +13,20 @@
 
 # macOS
 .DS_Store
+
+# Zed extension build artifacts
+extension.wasm
+grammars/*.wasm
+
+# Claude artifacts
+.claude/
+
+# Mojo compiler artifacts
+*.trace.json.*
+
+# Test files  
+test/
+
+# Exclude submodule content but keep submodule reference
+grammars/mojo/*
+!grammars/mojo/.gitkeep
