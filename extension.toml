@@ -2,7 +2,7 @@ id = "mojo"
 name = "Mojo"
 version = "0.0.1"
 schema_version = 1
-authors = ["Eduardo Ginez <eginez@gmail.com>"]
+authors = ["Esteban Ginez. <175813+eginez@users.noreply.github.com>"]
 description = "Mojo language support for Zed."
 repository = "https://github.com/eginez/mojo-zed-extension"
 
