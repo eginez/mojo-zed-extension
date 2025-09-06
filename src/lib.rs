@@ -4,14 +4,23 @@ struct MojoExtension {}
 
 impl MojoExtension {
     fn find_mojo_lsp_server(&self, worktree: &zed_extension_api::Worktree) -> Option<String> {
-        // In WASM, we can't access the filesystem to check if files exist
-        // So we'll try the most likely paths and let Zed validate them
+        // Note: Users can configure a custom path in settings.json:
+        // "lsp": { "mojo-lsp-server": { "binary": { "path": "/custom/path/to/mojo-lsp-server" } } }
+        // Zed automatically uses that path if configured, so this function only handles auto-discovery
 
+        // 1. Try PATH first (works for global installs and activated environments)
+        if let Some(path) = worktree.which("mojo-lsp-server") {
+            println!("Found mojo-lsp-server in PATH: {}", path);
+            return Some(path);
+        }
+
+        // 2. Try pixi environment (common for Mojo projects)
         let worktree_path = worktree.root_path();
         let pixi_path = format!("{}/.pixi/envs/default/bin/mojo-lsp-server", worktree_path);
-        println!("Trying pixi path first: {}", pixi_path);
+        println!("Trying pixi path: {}", pixi_path);
 
-        // Return the pixi path first since that's most likely for this project
+        // Note: In WASM we can't directly check file existence, but Zed will validate
+        // the path when it tries to execute the command. Return the most likely path.
         Some(pixi_path)
     }
 }
@@ -29,14 +38,19 @@ impl zed_extension_api::Extension for MojoExtension {
     ) -> zed_extension_api::Result<zed_extension_api::Command> {
         println!("MojoExtension::language_server_command()");
 
-        let command = self.find_mojo_lsp_server(worktree)
-            .ok_or_else(|| "mojo-lsp-server not found. Please install Mojo and ensure mojo-lsp-server is in your PATH.
-                Visit https://docs.modular.com/mojo/ for installation instructions.".to_string())?;
+        let command = self.find_mojo_lsp_server(worktree).ok_or_else(|| {
+            "mojo-lsp-server not found. Please:
+1. Install Mojo (https://docs.modular.com/mojo/)
+2. Ensure mojo-lsp-server is in your PATH, conda/pixi environment, or
+3. Configure a custom path in settings.json:
+   \"lsp\": { \"mojo-lsp-server\": { \"binary\": { \"path\": \"/path/to/mojo-lsp-server\" } } }"
+                .to_string()
+        })?;
 
         Ok(zed_extension_api::Command {
             command,
             args: vec![],
-            env: Default::default(),
+            env: worktree.shell_env(), // Use shell environment from worktree
         })
     }
 }
